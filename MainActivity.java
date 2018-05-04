@@ -31,13 +31,20 @@ public class MainActivity extends AppCompatActivity {
 
     private static RequestQueue requestQueue;
 
+    public static JSONObject jsonObject;
+
+    Get getter = new Get(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestQueue = Volley.newRequestQueue(this);
         setContentView(R.layout.activity_main);
 
+
         callAPI();
+
+        //Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG);
 
         final Button button = findViewById(R.id.update);
         button.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(final JSONObject response) {
                             //Log.d(TAG, response.toString());
-                            parseResponse(response);
+
+                            getter.parseResponse(response);
 
                         }
                         }, new Response.ErrorListener() {
@@ -79,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-    public void parseResponse(JSONObject response) {
+    /*public void parseResponse(JSONObject response) {
         TextView happy = findViewById(R.id.happy);
         TextView energy = findViewById(R.id.energy);
         TextView nerve = findViewById(R.id.nerve);
@@ -101,5 +109,5 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    }
+    }*/
 }
