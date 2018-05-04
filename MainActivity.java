@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static RequestQueue requestQueue;
 
-    public static JSONObject jsonObject;
-
     Get getter = new Get(this);
+
+    public static JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,73 +41,41 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         setContentView(R.layout.activity_main);
 
-
         callAPI();
-
-        //Toast.makeText(getApplicationContext(), jsonObject.toString(), Toast.LENGTH_LONG);
 
         final Button button = findViewById(R.id.update);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ProgressBar bar = findViewById(R.id.progressBar);
-                bar.setVisibility(View.VISIBLE);
                 callAPI();
-                bar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
 
             }
         });
     }
-
-    void callAPI () {
+    void callAPI() {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://api.torn.com/user/?selections=bars&key=JlDIvev6",
+                    "https://api.torn.com/user/?selections=basic,bars&key=JlDIvev6",
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
-                            //Log.d(TAG, response.toString());
-
-                            getter.parseResponse(response);
-
-                        }
-                        }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            //Log.w(TAG, error.toString());
+                            getter.parseBars(response);
+                            getter.getName(response);
 
                         }
-                    });
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
+
+                }
+            });
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    /*public void parseResponse(JSONObject response) {
-        TextView happy = findViewById(R.id.happy);
-        TextView energy = findViewById(R.id.energy);
-        TextView nerve = findViewById(R.id.nerve);
-
-        // Parse array
-        try {
-            String hap = "Happy: " + response.getJSONObject("happy").getString("current");
-            happy.setText(hap);
-
-            String ene = "Energy: " + response.getJSONObject("energy").getString("current");
-            energy.setText(ene);
-
-            String ner = "Nerve: " + response.getJSONObject("nerve").getString("current");
-            nerve.setText(ner);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-    }*/
 }

@@ -5,6 +5,12 @@ import android.widget.TextView;
 import android.app.*;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONObject;
 
 
@@ -13,25 +19,26 @@ public class Get {
     // Initialize context
     private Context context;
 
-    public Get(Context context) {
+    Get(Context context) {
         this.context = context;
     }
 
-    public void getName() {
-        TextView name = ((Activity)context).findViewById(R.id.name);
-        
+    public void getName(JSONObject response) {
+        TextView name = ((Activity) context).findViewById(R.id.name);
+
+        // Parse name
         try {
-
-
-
+            String user = response.get("name").toString();
+            name.setText(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void parseResponse(JSONObject response) {
-        TextView happy = ((Activity)context).findViewById(R.id.happy);
-        TextView energy = ((Activity)context).findViewById(R.id.energy);
-        TextView nerve = ((Activity)context).findViewById(R.id.nerve);
+
+    public void parseBars(JSONObject response) {
+        TextView happy = ((Activity) context).findViewById(R.id.happy);
+        TextView energy = ((Activity) context).findViewById(R.id.energy);
+        TextView nerve = ((Activity) context).findViewById(R.id.nerve);
 
         // Parse array
         try {
@@ -47,10 +54,5 @@ public class Get {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
-
-
 }
