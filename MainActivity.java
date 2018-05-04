@@ -1,12 +1,11 @@
 package com.example.yaboyzc.torntrack;
 
+import android.content.Context;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -15,44 +14,43 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.security.spec.ECField;
-
 
 public class MainActivity extends AppCompatActivity {
 
+    // idk
     private static final String TAG = "Torn Check";
 
+    // Request Queue
     private static RequestQueue requestQueue;
 
+    // Getter object for get class
     Get getter = new Get(this);
-
-    public static JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestQueue = Volley.newRequestQueue(this);
         setContentView(R.layout.activity_main);
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+        // Initialization of bars
         callAPI();
 
+        // Update button calls the api
         final Button button = findViewById(R.id.update);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 callAPI();
                 Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
 
             }
         });
     }
+    // Calls the Torn API
     void callAPI() {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
@@ -64,13 +62,10 @@ public class MainActivity extends AppCompatActivity {
                         public void onResponse(final JSONObject response) {
                             getter.parseBars(response);
                             getter.getName(response);
-
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
-
                 }
             });
             requestQueue.add(jsonObjectRequest);
